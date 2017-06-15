@@ -28,6 +28,7 @@ services:
 #很重要导入到处数据
     volumes:
       - ./data/mysql:/var/lib/mysql:rw
+      - ./dockerfiles/mysql/my.conf:/etc/my.conf:ro
     restart: always
     environment:
         MYSQL_ROOT_PASSWORD: zhaojun
@@ -37,11 +38,13 @@ services:
   redis-db:
     build: ./dockerfiles/redis
     container_name: redis-db
+    restart: always
     volumes:
       - ./data/redis:/data
   php-fpm:
     build: ./dockerfiles/php/
     container_name: php-fpm
+    restart: always
     volumes:
 #网站目录
       - ./app:/var/www/html:rw
