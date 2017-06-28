@@ -37,8 +37,7 @@ $ pwd
 
 //启动一个迁移数据容器
 ```shell
-$ docker run -it --link mysql-db:mysql --network 30goinghome_default -v /c/Users/zhaojunlike/Documents/WorkSpace/PHP/30-going-home/data/backup:/data/backup:ro --rm mysql:5.7 sh -c 'exec mysql -h"mysql" -P"3306" -uroot -p"zhaojun" packag
-e_v1</data/backup/data-default.sql'
+$ docker run -it --link mysql-db:mysql --network 30goinghome_default -v `pwd`/data/backup:/data/backup:ro --rm mysql:5.7 sh -c 'exec mysql -h"mysql" -P"3306" -uroot -p"zhaojun" package_v1</data/backup/data-default.sql'
 ```
 
 

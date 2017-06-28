@@ -4,7 +4,7 @@ services:
     build: ./dockerfiles/nginx/
     container_name: nginx-server
     ports:
-      - "81:80"
+      - "80:80"
     links:
       - "php-fpm"
     volumes:
@@ -66,8 +66,6 @@ services:
 #    image: mysql:5.7
 #    volumes:
 #      - ./data/backup:/data/backup
-
-
 volumes:
   wwwroot:
     driver: local

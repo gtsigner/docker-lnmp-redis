@@ -4,8 +4,11 @@
 /data/redis/*
 /data/backup/*
 !/data/backup/data-default.sql
+!/data/backup/README.txt
+!/data/mysql/README.txt
+!/data/redis/README.txt
 /app/webroot/Application/Runtime/*
-/logs/mysql/*
-/logs/nginx/*
-/logs/php-fpm/*
-/logs/redis/*
+/logs/mysql/*.log
+/logs/nginx/*.log
+/logs/php-fpm/*.log
+/logs/redis/*.log
