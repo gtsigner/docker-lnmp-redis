@@ -30,6 +30,8 @@ services:
       - ./data/mysql:/var/lib/mysql:rw
       - ./dockerfiles/mysql/my.conf:/etc/my.conf:ro
     restart: always
+    ports:
+      - "3306:3306"
     environment:
         MYSQL_ROOT_PASSWORD: zhaojun
         MYSQL_DATABASE: package_v1
