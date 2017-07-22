@@ -1,53 +1,46 @@
-version:  '3.2'
+version:  '3.0'
 services:
+##基础环境
   nginx:
-    build: ./dockerfiles/nginx/
-    container_name: nginx-server
-    ports:
-      - "80:80"
-    links:
-      - "php-fpm"
+    image: nginx:1.13.3
     volumes:
 #网站目录
       - ./app:/var/www/html
       - ./dockerfiles/nginx/conf.d:/etc/nginx/conf.d:ro
 #日志文件
       - ./logs/nginx:/var/log/nginx
-    depends_on:
-      - redis-db
-    restart: always
-    expose:
-      - "81"
-      - "6379"
-      - "3306"
-      - "9000"
+    ports:
+      - "80:80"
+    deploy:
+      restart_policy:
+        condition: any
     command: nginx -g 'daemon off;'
   mysql-db:
     image: mysql:5.7
-    container_name: mysql-db
 #很重要导入到处数据
     volumes:
       - ./data/mysql:/var/lib/mysql:rw
       - ./logs/mysql:/var/lib/mysql-logs:rw
       - ./dockerfiles/mysql/conf.d:/etc/mysql/conf.d:ro
-    restart: always
-    ports:
-      - "3306:3306"
     environment:
         MYSQL_ROOT_PASSWORD: zhaojun
-        MYSQL_DATABASE: package_v1
+        MYSQL_DATABASE: lottery_api_sale
         MYSQL_USER: zhaojun
         MYSQL_PASSWORD: zhaojun
+    ports:
+      - "3306:3306"
+    deploy:
+      restart_policy:
+        condition: any
   redis-db:
-    build: ./dockerfiles/redis
-    container_name: redis-db
-    restart: always
+    image: redis
     volumes:
       - ./data/redis:/data
+    deploy:
+      restart_policy:
+        condition: any
   php-fpm:
-    build: ./dockerfiles/php/
-    container_name: php-fpm
-    restart: always
+    image: zhaojunlike/php-fpm:5.6
     volumes:
 #网站目录
       - ./app:/var/www/html:rw
@@ -57,32 +50,92 @@ services:
 
 #挂载站点日志
       - ./logs/php-fpm:/var/log/php-fpm:rw
-    depends_on:
-      - mysql-db
-      - redis-db
-    links:
-      - mysql-db
-      - redis-db
+    deploy:
+      restart_policy:
+        condition: any
     command: php-fpm
+
+##附加扩展安装器
   composer:
     image: composer:1.4.2
     volumes:
-    #网站目录
       - ./app:/app:rw
     working_dir: /app/webroot
+    deploy:
+      restart_policy:
+        condition: none
     command: composer install
   bower:
     image: digitallyseamless/nodejs-bower-grunt
     volumes:
-    #网站目录
       - ./app:/app:rw
     working_dir: /app/webroot
+    deploy:
+      restart_policy:
+        condition: none
     command: bower install
-##第一次迁移数据所需的镜像 version0.3 README手动迁移
-#  mysql-database:
-#    image: mysql:5.7
-#    volumes:
-#      - ./data/backup:/data/backup
+
+
+##自动支付
+  auto_pay:
+    image: node:6.9
+    environment:
+        NOTIFY_URI: http://nginx-server
+    volumes:
+      - ./app/alipay_auto_pay:/app
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      restart_policy:
+        condition: any
+    working_dir: /app
+    command: /bin/bash -c "npm install && node ./index.js"
+
+##集群监控
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+##GoogleDocker资源监控
+  cadvisor:
+    image: google/cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - "8081:8080"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+##Mysql备份的服务,
+# 启动一次备份服务 ./docker-compose restart backup
+  backup:
+    image: mysql:5.7
+    environment:
+        MYSQL_HOST: mysql
+        MYSQL_DATABASE: package_v1
+        MYSQL_USER: root
+        MYSQL_PASSWORD: zhaojun
+    depends_on:
+      - mysql-db
+    links:
+      - mysql-db:mysql
+    volumes:
+      - ./data/backup:/backup:rw
+      - ./dockerfiles/backup/:/app:ro
+    entrypoint:
+      - /bin/bash
+    command: /app/backup-default.sh
+
+
 volumes:
   wwwroot:
     driver: local
