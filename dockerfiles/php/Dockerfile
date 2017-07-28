@@ -11,5 +11,7 @@ RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
     && pecl install redis-3.1.0 \
-    && docker-php-ext-enable redis \
+    && pecl install xdebug-2.5.0 \
+    && docker-php-ext-enable redis xdebug \
+
 #Flag:最后记得清理apt产生的垃圾，减少空间占用  rm -rf /....
