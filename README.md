@@ -1,15 +1,51 @@
-##
+### Overview 
+docker 的开发环境和线上生产环境
 
-## Usage
-1.git clone .
+### Containers
+-   1.nginx
+-   2.mysql-db
+-   3.redis-db
+-   4.php-fpm
+-   5.composer
+-   6.bower
+-   7.visualizer
 
-2.docker-compose up --build
+其中不需要的镜像可以注释掉
 
-## 第一次需要手动导入测试数据
-导入默认的测试数据
-```shell
-$  docker network ls
-$  docker run -it --link mysql-db:mysql --network client101vbbs_default -v `pwd`/data/backup:/data/backup:ro --rm mysql:5.7 sh -c 'exec mysql -h"mysql" -P"3306" -uroot -p"zhaojun" oeynet_client_bbs<./data/backup/oeynet_client_bbs.sql'
+
+
+### Install Docker
+安装Docker Ce
+```bash
+$bash ./app/tools/docker-installer.sh
 ```
+### Install docker-compose
+```bash
+$cp ./docker-compose /usr/local/bin/
+$chmod +x /usr/lcoal/bin/docker-compose
+```
+### Usage
+
+默认启动方式,这种方式适用于本地测试开发环境，暴漏了数据库端口redis端口方便调试
+1.docker-compose up --build
+
+
+### backup data
+导入默认的测试数据
+```base
+$docker-compose -f db-backup.yml up 
+```
+
+
+### restore data 
+还原default备份数据
+```bash
+$docker-compose -f db-restore.yml up
+```
+
+
+
+
+
 
 
