@@ -1,4 +1,4 @@
-### Overview 
+## Overview 
 docker 的开发环境和线上生产环境
 
 ### Containers
@@ -12,6 +12,8 @@ docker 的开发环境和线上生产环境
 
 其中不需要的镜像可以注释掉
 
+## QuickStart
+
 
 
 ### Install Docker
@@ -24,10 +26,13 @@ $bash ./app/tools/docker-installer.sh
 $cp ./docker-compose /usr/local/bin/
 $chmod +x /usr/lcoal/bin/docker-compose
 ```
-### Usage
+## Usage
 
 默认启动方式,这种方式适用于本地测试开发环境，暴漏了数据库端口redis端口方便调试
 1.docker-compose up --build
+
+部署环境
+2.
 
 
 ### backup data
@@ -44,7 +49,12 @@ $docker-compose -f db-restore.yml up
 ```
 
 
+## Future
+1. project-cli 生成架构工具
 
+2. 集群部署
+
+3. gitlab gitlab-runner 实现CI CD
 
 
 
