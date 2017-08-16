@@ -1,5 +1,4 @@
 #! /bin/bash
-
 #安装软件
 yum install -y yum-utils device-mapper-persistent-data lvm2
 #yum repo
