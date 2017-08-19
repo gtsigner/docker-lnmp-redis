@@ -34,7 +34,7 @@ services:
         MYSQL_DATABASE: package_v1
         MYSQL_USER: zhaojun
         MYSQL_PASSWORD: zhaojun
-
+    command: "--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
   redis-db:
     build: ./dockerfiles/redis
     restart: always
@@ -64,32 +64,3 @@ services:
       - mysql-db:mysql-db
       - redis-db:redis-db
     command: php-fpm
-
-##composer构建工具，官方的composer中得php未编译bcmath
-  composer:
-    #image: composer:1.4.2
-    image: zhaojunlike/composer:5.6-latest
-    #build: ./dockerfiles/composer/
-    volumes:
-    #网站目录
-      - ./app:/app:rw
-    working_dir: /app/webroot
-    command: composer install
-
-##前端工具
-  bower:
-    image: digitallyseamless/nodejs-bower-grunt
-    volumes:
-      - ./app:/app:rw
-    working_dir: /app/webroot
-    command: bower install
-
-  cadvisor:
-    image: google/cadvisor
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    ports:
-      - "8081:8080"

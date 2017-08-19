@@ -1,5 +1,8 @@
 #! /bin/bash
 #安装软件
+
+echo "Install Packages Form Docker......"
+
 yum install -y yum-utils device-mapper-persistent-data lvm2
 #yum repo
 yum-config-manager \

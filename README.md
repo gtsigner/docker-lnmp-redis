@@ -48,6 +48,11 @@ $docker-compose -f db-backup.yml up
 $docker-compose -f db-restore.yml up
 ```
 
+### 启动构建项目依耐工具
+```bash
+$docker-compose -f docker-build.yml up
+```
+
 
 ## Future
 1. project-cli 生成架构工具
