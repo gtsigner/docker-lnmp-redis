@@ -29,7 +29,7 @@ services:
         MYSQL_DATABASE: lottery_v1
         MYSQL_USER: zhaojun
         MYSQL_PASSWORD: zhaojun
-    command: "--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+    command: "--character-set-server=utf8 --collation-server=utf8_unicode_ci"
   redis-db:
     build: ./dockerfiles/redis
     restart: always
@@ -46,7 +46,7 @@ services:
     volumes:
       - ./app:/app:rw
       - /etc/localtime:/etc/localtime:ro
-      - ./dockerfiles/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./dockerfiles/php/php-pro.ini:/usr/local/etc/php/php.ini:ro
       - ./dockerfiles/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
     links:
