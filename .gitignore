@@ -2,9 +2,8 @@
 /.idea
 #数据库文件
 
-/data/mysql/*
-/data/redis/*
-/data/backup/*
+/data/redis/
+/data/backup/
 !/data/backup/README.txt
 !/data/mysql/README.txt
 /logs/mysql/*.log
@@ -15,3 +14,6 @@
 !/data/backup/*.sql
 !/data/redis/README.txt
 
+app/webroot/vender/
+data/mysql/
+dockerfiles/php/conf.d/
