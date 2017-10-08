@@ -39,8 +39,8 @@ services:
       - ./data/redis:/data
       - /etc/localtime:/etc/localtime:ro
   php-fpm:
-    build: ./dockerfiles/php/
-    #image: zhaojunlike/php-fpm:5.6-latest
+    #build: ./dockerfiles/php/
+    image: zhaojunlike/php-fpm:5.6-latest
     restart: always
     environment:
       TP_APP_DEBUG: 1
